@@ -47,10 +47,16 @@ async def register(user_data: UserCreate) -> Any:
             )
             return Token(access_token=access_token, token_type="bearer")
     except Exception as e:
-        print(f"Registration failed: {str(e)}")
+        error_msg = str(e)
+        if hasattr(e, 'response') and e.response:
+            try:
+                error_msg = f"{e} - Body: {e.response.text}"
+            except:
+                pass
+        print(f"Registration failed: {error_msg}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Registration failed: {str(e)}"
+            detail=f"Registration failed: {error_msg}"
         )
 
 

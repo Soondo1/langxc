@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,11 +14,11 @@ import '../models/translation.dart';
 /// - Vocabulary management
 class BackendApiService {
   static final BackendApiService _instance = BackendApiService._internal();
-  
+
   factory BackendApiService() {
     return _instance;
   }
-  
+
   BackendApiService._internal();
 
   static const String baseUrl = 'http://localhost:8000';
@@ -54,14 +55,19 @@ class BackendApiService {
           )
           .timeout(const Duration(seconds: 10));
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         final data = json.decode(response.body);
         await _saveToken(data['access_token']);
         return true;
       }
+      if (kDebugMode) {
+        print('Registration failed: ${response.statusCode} - ${response.body}');
+      }
       return false;
     } catch (e) {
-      print('Register error: $e');
+      if (kDebugMode) {
+        print('Register error: $e');
+      }
       return false;
     }
   }
@@ -84,7 +90,9 @@ class BackendApiService {
       }
       return false;
     } catch (e) {
-      print('Login error: $e');
+      if (kDebugMode) {
+        print('Login error: $e');
+      }
       return false;
     }
   }
@@ -106,7 +114,9 @@ class BackendApiService {
       }
       return null;
     } catch (e) {
-      print('Get user error: $e');
+      if (kDebugMode) {
+        print('Get user error: $e');
+      }
       return null;
     }
   }
@@ -143,7 +153,9 @@ class BackendApiService {
 
       return response.statusCode == 201;
     } catch (e) {
-      print('Save translation error: $e');
+      if (kDebugMode) {
+        print('Save translation error: $e');
+      }
       return false;
     }
   }
@@ -177,10 +189,16 @@ class BackendApiService {
       if (response.statusCode == 200) {
         return json.decode(response.body);
       }
-      print('Proxy translation failed: ${response.statusCode} ${response.body}');
+      if (kDebugMode) {
+        print(
+          'Proxy translation failed: ${response.statusCode} ${response.body}',
+        );
+      }
       return null;
     } catch (e) {
-      print('Proxy translation error: $e');
+      if (kDebugMode) {
+        print('Proxy translation error: $e');
+      }
       return null;
     }
   }
@@ -216,7 +234,9 @@ class BackendApiService {
       }
       return [];
     } catch (e) {
-      print('Get translations error: $e');
+      if (kDebugMode) {
+        print('Get translations error: $e');
+      }
       return [];
     }
   }
@@ -238,7 +258,9 @@ class BackendApiService {
       }
       return null;
     } catch (e) {
-      print('Get stats error: $e');
+      if (kDebugMode) {
+        print('Get stats error: $e');
+      }
       return null;
     }
   }
@@ -260,7 +282,9 @@ class BackendApiService {
       }
       return null;
     } catch (e) {
-      print('Get weekly summary error: $e');
+      if (kDebugMode) {
+        print('Get weekly summary error: $e');
+      }
       return null;
     }
   }
@@ -282,7 +306,9 @@ class BackendApiService {
       }
       return null;
     } catch (e) {
-      print('Get daily summary error: $e');
+      if (kDebugMode) {
+        print('Get daily summary error: $e');
+      }
       return null;
     }
   }
@@ -304,7 +330,9 @@ class BackendApiService {
       }
       return null;
     } catch (e) {
-      print('Get two-day summary error: $e');
+      if (kDebugMode) {
+        print('Get two-day summary error: $e');
+      }
       return null;
     }
   }
@@ -323,7 +351,9 @@ class BackendApiService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('Delete translation error: $e');
+      if (kDebugMode) {
+        print('Delete translation error: $e');
+      }
       return false;
     }
   }
@@ -356,7 +386,9 @@ class BackendApiService {
       }
       return [];
     } catch (e) {
-      print('Get vocabulary error: $e');
+      if (kDebugMode) {
+        print('Get vocabulary error: $e');
+      }
       return [];
     }
   }
@@ -379,7 +411,9 @@ class BackendApiService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('Mark mastered error: $e');
+      if (kDebugMode) {
+        print('Mark mastered error: $e');
+      }
       return false;
     }
   }
@@ -398,7 +432,9 @@ class BackendApiService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('Delete vocabulary error: $e');
+      if (kDebugMode) {
+        print('Delete vocabulary error: $e');
+      }
       return false;
     }
   }
@@ -444,7 +480,9 @@ class BackendApiService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('Health check error: $e');
+      if (kDebugMode) {
+        print('Health check error: $e');
+      }
       return false;
     }
   }
@@ -454,7 +492,7 @@ class BackendApiService {
     if (!isAuthenticated) return false;
 
     try {
-      // Note: This endpoint might not exist in the backend yet, 
+      // Note: This endpoint might not exist in the backend yet,
       // but we add the method to satisfy the frontend call.
       // If the backend doesn't support it, it will return 404 but not crash the app.
       final response = await http
@@ -470,7 +508,9 @@ class BackendApiService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('Update FCM token error: $e');
+      if (kDebugMode) {
+        print('Update FCM token error: $e');
+      }
       return false;
     }
   }
@@ -499,7 +539,9 @@ class BackendApiService {
 
       return response.statusCode == 200;
     } catch (e) {
-      print('Update preferences error: $e');
+      if (kDebugMode) {
+        print('Update preferences error: $e');
+      }
       return false;
     }
   }

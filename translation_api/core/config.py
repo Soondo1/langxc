@@ -17,14 +17,14 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # Security
-    SECRET_KEY: str = "default-insecure-secret-key-change-me-in-production"
+    SECRET_KEY: str  # Must be set in .env
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080  # 7 days
 
     # PocketBase Configuration
     POCKETBASE_URL: str = "http://localhost:8090"
-    POCKETBASE_EMAIL: str = "admin@example.com"
-    POCKETBASE_PASSWORD: str = "your-admin-password"
+    POCKETBASE_EMAIL: str  # Must be set in .env
+    POCKETBASE_PASSWORD: str  # Must be set in .env
 
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = ["*"]

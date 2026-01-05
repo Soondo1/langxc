@@ -20,8 +20,9 @@ class PocketBaseClient:
 
     async def authenticate_admin(self) -> str:
         """Authenticate as admin and return token."""
+        # PocketBase v0.23+ uses _superusers collection instead of admins
         response = await self.client.post(
-            f"{self.base_url}/api/admins/auth-with-password",
+            f"{self.base_url}/api/collections/_superusers/auth-with-password",
             json={
                 "identity": settings.POCKETBASE_EMAIL,
                 "password": settings.POCKETBASE_PASSWORD
