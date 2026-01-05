@@ -16,6 +16,8 @@ from routers import auth, translations, vocabulary, users
 limiter = Limiter(key_func=get_remote_address)
 
 
+from core.pocketbase_client import pocketbase
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Handle application startup and shutdown."""
@@ -26,6 +28,7 @@ async def lifespan(app: FastAPI):
     yield
 
     # Shutdown
+    await pocketbase.close()
     # await notification_scheduler.stop()
 
 

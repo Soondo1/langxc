@@ -13,6 +13,9 @@ class PocketBaseClient:
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
+        pass
+
+    async def close(self):
         await self.client.aclose()
 
     async def authenticate_admin(self) -> str:

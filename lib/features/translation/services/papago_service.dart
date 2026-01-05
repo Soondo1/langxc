@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import '../../../core/constants/app_constants.dart';
+import '../../../core/services/backend_api_service.dart';
 
 class PapagoService {
   static const Duration _timeout = Duration(seconds: 10);

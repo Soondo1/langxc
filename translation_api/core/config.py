@@ -27,11 +27,7 @@ class Settings(BaseSettings):
     POCKETBASE_PASSWORD: str = "your-admin-password"
 
     # CORS
-    BACKEND_CORS_ORIGINS: List[str] = [
-        "http://localhost:3000",
-        "http://localhost:8080",
-        "http://localhost:61311",
-    ]
+    BACKEND_CORS_ORIGINS: List[str] = ["*"]
 
     # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = 60
